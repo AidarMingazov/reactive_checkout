@@ -8,3 +8,15 @@ Simple project with an example of service integration https://reactivepay.com/
 docker compose build
 docker compose up
 ```
+
+### Sign in as
+
+```
+Customer
+  email: customer@test.test
+  password: customer
+
+Admin
+  email: admin@test.test
+  password: admin
+```
