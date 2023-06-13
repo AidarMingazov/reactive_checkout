@@ -1,9 +1,9 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: 'localhost'
-  username: 'postgres'
-  password: ''
+  host: <%= ENV['DB_HOST']%>
+  username: <%= ENV['DB_USERNAME']%>
+  password: <%= ENV['DB_PASSWORD']%>
   pool: 5
 
 development:
@@ -13,3 +13,12 @@ development:
 test:
   <<: *default
   database: reactive_checkout_test
+
+production:
+  adapter: postgresql
+  encoding: unicode
+  port: <%= ENV['DB_PORT']%>
+  host: <%= ENV['DB_HOST']%>
+  username: <%= ENV['DB_USERNAME']%>
+  password: <%= ENV['DB_PASSWORD']%>
+  pool: 5
