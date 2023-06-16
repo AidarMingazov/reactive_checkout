@@ -16,7 +16,7 @@ class PayoutsController < ApplicationController
   def create
     result = Payouts::Create.call(payout_params: payout_params)
 
-    redirect_to payout_path(result.payout)
+    redirect_to payouts_path(result.payout)
   end
 
   private
