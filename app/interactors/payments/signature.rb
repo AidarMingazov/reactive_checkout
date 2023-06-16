@@ -2,7 +2,7 @@ module Payments
   class Signature
     include Interactor
 
-    delegate :payment, to: :context
+    delegate :payment, :callback, to: :context
 
     # algorithm check signature
     # values = [token, payment_type, status, extraReturnParam, orderNumber, amount, currency, gatewayAmount, gatewayCurrency]
@@ -12,6 +12,7 @@ module Payments
     # TODO: in the current implementation, the algorithm does not work correctly
 
     def call
+      payment.update(callback: callback)
       # Digest::MD5.hexdigest(prepared_string) == payment.signature
     end
 
