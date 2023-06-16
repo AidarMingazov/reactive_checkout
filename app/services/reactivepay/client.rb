@@ -9,6 +9,12 @@ class Reactivepay::Client
     HTTParty.post(base_url + 'payments', body: body, headers: headers)
   end
 
+  def create_payout(attributes, card, customer)
+    body = prepare_json_api_body(attributes, card, customer).to_json
+
+    HTTParty.post(base_url + 'payouts', body: body, headers: headers)
+  end
+
   private
 
   def headers

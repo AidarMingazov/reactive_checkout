@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root 'products#index'
 
   resources :payments, only: %i[index show new create]
+  resources :payouts, only: %i[index show new create]
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do

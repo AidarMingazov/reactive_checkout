@@ -62,10 +62,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_06_16_111859) do
     t.string "city"
     t.string "region"
     t.string "postcode"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.integer "sign_in_count", default: 0, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "payments", "products"
   add_foreign_key "payments", "users"
+  add_foreign_key "payouts", "users"
 end
