@@ -34,7 +34,7 @@ class PaymentsController < ApplicationController
 
   def payment_params
     params.require(:payment).permit(
-      :card_number, :card_cvc, :card_expared_mounth, :card_holder,
+      :card_number, :card_cvc, :card_holder,
       :card_expared_year, :card_expared_month, :product_id
     ).merge!(user_id: current_user.id)
   end

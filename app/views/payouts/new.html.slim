@@ -1,0 +1,19 @@
+| if you transfer money, please fill in form
+br
+| Don’t use real cards on Sandbox environment!
+br
+| Sandbox Environment:
+br
+br
+| card number: 4276111152393643
+br
+| expiration could be any
+br
+br
+= simple_form_for :payout, url: '/payout', html: { method: :post } do |f|
+  = f.input :amount, as: :integer, label: 'Amount in cents:'
+  = f.input :card_number, as: :string, label: 'Credit Card Number:', maxlength: 20
+  = f.input :card_expared_month, collection: 1..12, label: 'Expiry Date (mounth):'
+  = f.input :card_expared_year, collection: Date.current.year..(Date.current.year + 10), label: 'Expiry Date (year):'
+  br
+  = f.submit 'Process Payout'

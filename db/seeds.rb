@@ -16,6 +16,7 @@ User.create(
 
 User.create(
   email: 'admin@test.test',
+  role: 'admin',
   password: 'admin123',
   password_confirmation: 'admin123',
   phone: '99894511',

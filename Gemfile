@@ -15,10 +15,13 @@ gem 'money', '~> 6.16'
 gem 'interactor', '~> 3.1', '>= 3.1.2'
 gem 'decent_exposure', '~> 3.0', '>= 3.0.4'
 gem 'devise', '~> 4.9', '>= 4.9.2'
+gem 'warden'
+gem 'devise_traceable'
 gem 'slim', '~> 5.1', '>= 5.1.1'
 gem 'enumerize', '~> 2.6', '>= 2.6.1'
 gem 'simple_form'
 gem 'faker'
+gem 'pundit'
 
 gem 'tzinfo-data', platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
 gem 'bootsnap', require: false

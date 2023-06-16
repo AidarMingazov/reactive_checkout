@@ -128,6 +128,9 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    devise_traceable (0.0.5)
+      devise
+      warden
     diff-lcs (1.5.0)
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
@@ -197,6 +200,8 @@ GEM
     public_suffix (5.0.1)
     puma (6.3.0)
       nio4r (~> 2.0)
+    pundit (2.3.0)
+      activesupport (>= 3.0.0)
     racc (1.7.0)
     rack (3.0.7)
     rack-session (2.0.0)
@@ -297,6 +302,7 @@ DEPENDENCIES
   debug
   decent_exposure (~> 3.0, >= 3.0.4)
   devise (~> 4.9, >= 4.9.2)
+  devise_traceable
   dotenv-rails
   enumerize (~> 2.6, >= 2.6.1)
   factory_bot_rails
@@ -308,6 +314,7 @@ DEPENDENCIES
   money (~> 6.16)
   pg (~> 1.1)
   puma (>= 5.0)
+  pundit
   rails!
   rspec-rails (~> 6.0.0)
   selenium-webdriver
@@ -317,6 +324,7 @@ DEPENDENCIES
   stimulus-rails
   turbo-rails
   tzinfo-data
+  warden
   web-console
   webdrivers
 

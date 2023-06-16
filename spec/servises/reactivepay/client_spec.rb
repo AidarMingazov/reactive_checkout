@@ -64,4 +64,51 @@ describe Reactivepay::Client do
       end
     end
   end
+
+  describe '.create_payout' do
+    subject(:create_payout) { described_class.new.create_payout(attributes, card, customer) }
+
+    let(:reactivepay_response) { instance_double(HTTParty::Response, body: reactivepay_response_body) }
+    let(:reactivepay_response_body) { 'response_body' }
+    let(:url) { "#{ENV.fetch('REACTIVEPAY_BASE_URL')}payouts" }
+
+    before do
+      allow(HTTParty).to receive(:post).and_return(reactivepay_response)
+      create_payout
+    end
+
+    context 'with some attributes' do
+      let(:attributes) do
+        {
+          'amount': 100,
+          'currency': 'USD',
+          'extraReturnParam': 'test3119',
+          'orderNumber': 'test123'
+        }
+      end
+
+      let(:card) do
+        {
+          'pan': '4392963203551251',
+          'expires': '05/2024'
+         }
+      end
+
+      let(:customer) do
+        {
+          'email': 'test@test.test',
+          'address': '4057 Tanner Street',
+          'ip': '1.1.1.1'
+         }
+      end
+
+      let(:request_body) do
+        attributes.merge!(card: card).merge!(customer: customer).to_json
+      end
+
+      it 'makes post request to payouts endpoint' do
+        expect(HTTParty).to have_received(:post).with(url, body: request_body, headers: request_headers)
+      end
+    end
+  end
 end
