@@ -10,6 +10,8 @@ services:
       - 'dbdata:/var/lib/postgresql/data'
 
   web:
+    tty: true
+    stdin_open: true
     build: .
     ports:
       - '3000:3000'
