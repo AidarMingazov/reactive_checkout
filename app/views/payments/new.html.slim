@@ -1,0 +1,24 @@
+| if you want to buy 
+= product.name
+|, please fill in form
+br
+br
+| Don’t use real cards on Sandbox environment!
+br
+| Sandbox Environment:
+br
+br
+| card number: 4392963203551251
+br
+| CVC, expiration and holder could be any
+br
+br
+= simple_form_for :payment, url: '/payments', html: { method: :post } do |f|
+  = f.input :card_number, as: :string, label: 'Credit Card Number:', maxlength: 20
+  = f.input :card_cvc, as: :string, label: 'CVC:', maxlength: 3
+  = f.input :card_expared_month, collection: 1..12, label: 'Expiry Date (mounth):'
+  = f.input :card_expared_year, collection: Date.current.year..(Date.current.year + 10), label: 'Expiry Date (year):'
+  = f.input :card_holder, as: :string, label: 'Holder name:' 
+  = f.input :product_id, as: :hidden, input_html: { value: params[:product_id] }
+  br
+  = f.submit 'Process Payment'

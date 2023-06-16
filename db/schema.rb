@@ -10,9 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_06_13_115549) do
+ActiveRecord::Schema[7.1].define(version: 2023_06_15_225914) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "payments", force: :cascade do |t|
+    t.integer "price"
+    t.string "status"
+    t.string "processing_url"
+    t.string "signature"
+    t.json "payment_response"
+    t.bigint "product_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "callback"
+    t.string "token"
+    t.index ["product_id"], name: "index_payments_on_product_id"
+    t.index ["user_id"], name: "index_payments_on_user_id"
+  end
 
   create_table "products", force: :cascade do |t|
     t.string "name", null: false
@@ -40,4 +56,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_06_13_115549) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "payments", "products"
+  add_foreign_key "payments", "users"
 end

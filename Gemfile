@@ -17,6 +17,8 @@ gem 'decent_exposure', '~> 3.0', '>= 3.0.4'
 gem 'devise', '~> 4.9', '>= 4.9.2'
 gem 'slim', '~> 5.1', '>= 5.1.1'
 gem 'enumerize', '~> 2.6', '>= 2.6.1'
+gem 'simple_form'
+gem 'faker'
 
 gem 'tzinfo-data', platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
 gem 'bootsnap', require: false
@@ -24,6 +26,8 @@ gem 'bootsnap', require: false
 group :development, :test do
   gem 'debug', platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
   gem 'dotenv-rails'
+  gem 'rspec-rails', '~> 6.0.0'
+  gem 'factory_bot_rails', require: false
 end
 
 group :development do
@@ -35,5 +39,3 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 end
-
-gem "cssbundling-rails", "~> 1.1"
