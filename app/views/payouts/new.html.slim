@@ -10,7 +10,7 @@ br
 | expiration could be any
 br
 br
-= simple_form_for :payout, url: '/payout', html: { method: :post } do |f|
+= simple_form_for :payout, url: '/payouts', html: { method: :post } do |f|
   = f.input :amount, as: :integer, label: 'Amount in cents:'
   = f.input :card_number, as: :string, label: 'Credit Card Number:', maxlength: 20
   = f.input :card_expared_month, collection: 1..12, label: 'Expiry Date (mounth):'
