@@ -11,12 +11,40 @@ class PaymentsController < ApplicationController
     result = Payments::Create.call(payment_params: payment_params)
 
     if result.success?
-      redirect_to payment_path(result.payment)
+      if result.payment.approve_form.present?
+        redirect_to payment_3ds_path(result.payment)
+      else
+        redirect_to payment_path(result.payment)
+      end
     else
       flash[:error] = result.error
       redirect_to root_path
     end
   end
+  
+  def success
+    result = Payments::Signature.call(payment: payment, callback: params)
+
+    if result.success?
+      render 'success'
+    else
+      flash[:error] = result.error
+      redirect_to root_path
+    end
+  end
+
+  def declined
+    result = Payments::Signature.call(payment: payment, callback: params)
+
+    if result.success?
+      render 'declined'
+    else
+      flash[:error] = result.error
+      redirect_to root_path
+    end
+  end
+
+  def approve_form; end
 
   private
 
@@ -25,7 +53,7 @@ class PaymentsController < ApplicationController
   end
 
   def fetch_payment
-    Payment.find_by(id: params[:id])
+    Payment.find_by(id: params[:id] || params[:payment_id])
   end
 
   def fetch_product
