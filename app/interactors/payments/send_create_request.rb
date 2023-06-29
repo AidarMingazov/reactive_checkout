@@ -6,8 +6,11 @@ module Payments
 
     def call
       if create_payment_response.success?
-        if approved
+        if approved?
           update_payment('approved')
+        elsif init?
+          update_payment('init')
+          context.redirect_request = redirect_request
         else
           payment.update(status: 'unexpected_result', payment_response: parsed_response)
           context.fail!(error: 'unexpected result')
@@ -31,19 +34,20 @@ module Payments
     def update_payment(status)
       payment.update(
         status: status,
-        payment_response: parsed_response,
-        signature: signature,
-        processing_url: parsed_response['processingUrl'],
-        token: parsed_response['token']
+        payment_response: parsed_response
       )
     end
 
-    def approved
+    def approved?
       parsed_response['payment']['status'] == 'approved'
     end
 
-    def signature
-      parsed_response['processingUrl'][/signature=(.*?)$/m, 1]
+    def init?
+      parsed_response['payment']['status'] == 'init'
+    end
+
+    def redirect_request
+      parsed_response['redirectRequest']
     end
   end
 end

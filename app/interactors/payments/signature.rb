@@ -9,38 +9,25 @@ module Payments
     # 1) The sum of all parameters, which consists of the length of the string + the string itself.
     # 2) We encode the final string + merchant token in hashlib.md5
 
-    # TODO: in the current implementation, the algorithm does not work correctly
-
     def call
+      context.fail!(error: 'payment not found') unless payment
+
       payment.update(callback: callback)
-      # Digest::MD5.hexdigest(prepared_string) == payment.signature
+      Digest::MD5.hexdigest(prepared_string) == callback['signature']
     end
 
     private
 
-    def token
-      payment.processing_url[/token=(.*?)\u0026/m, 1]
-    end
-
-    def gateway_amount
-      payment.processing_url[/gatewayAmount=(.*?)\u0026/m, 1]
-    end
-
-    def gateway_currency
-      payment.processing_url[/gatewayCurrency=(.*?)\u0026/m, 1]
-    end
-
     def prepared_string
       values = [
-        token,
-        'payment',
-        payment.status,
-        "id_#{payment.id.to_s}",
-        "id_#{payment.id.to_s}",
-        (payment.price.cents / 100),
-        payment.price.currency.iso_code,
-        gateway_amount,
-        gateway_currency
+        callback['token'],
+        callback['status'],
+        callback['extraReturnParam'],
+        callback['orderNumber'],
+        callback['amount'],
+        callback['currency'],
+        callback['gatewayAmount'],
+        callback['gatewayCurrency']
       ]
 
       str = ''

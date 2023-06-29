@@ -15,6 +15,10 @@ class Reactivepay::Client
     HTTParty.post(base_url + 'payouts', body: body, headers: headers)
   end
 
+  def redirect_3ds(url, params)
+    HTTParty.post(url, body: params)
+  end
+
   private
 
   def headers

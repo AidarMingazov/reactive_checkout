@@ -6,7 +6,8 @@ describe Payments::Create do
       [
         Payments::BuildPayment,
         Payments::PrepareRequest,
-        Payments::SendCreateRequest
+        Payments::SendCreateRequest,
+        Payments::RedirectRequest
       ]
       end
 

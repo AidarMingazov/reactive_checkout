@@ -56,7 +56,7 @@ describe Payments::SendCreateRequest do
       'result': 0,
       'status': 200,
       'token': 'token',
-      'processingUrl': processing_url,
+      'processingUrl': 'https://reactive-y69rn.ondigitalocean.app/',
       'payment': {
         'amount': 100, 
         'gateway_amount': 100,
@@ -68,15 +68,18 @@ describe Payments::SendCreateRequest do
     }.to_json
   end
 
-  let(:processing_url) do
-    "https://reactive-y69rn.ondigitalocean.app/?token=3n9vrwbwsiWp6kV88KdoN2z19K7aQr12\u0026type=pay\u0026status=approved\u0026"\
-    "extraReturnParam=test3119\u0026orderNumber=test123\u0026walletDisplayName=\u0026amount=100\u0026currency=USD\u0026"\
-    "gatewayAmount=100\u0026gatewayCurrency=USD\u0026gatewayDetails=%7B%22merchant%22%3D%3E%7B%22ip%22%3D%3E%2294.25.171.232%22%7D%2C+%22"\
-    "processing_url%22%3D%3E%22https%3A%2F%2Fbusiness.reactivepay.com%2Fcheckout%2F3n9vrwbwsiWp6kV88KdoN2z19K7aQr12%3Fcustomer%255Baddress"\
-    "%255D%3D4057%2BTanner%2BStreet%26customer%255Bcity%255D%3DVancouver%26customer%255Bcountry%255D%3DCA%26customer%255Bemail%255D%3Dtest"\
-    "%2540test.test%26customer%255Bphone%255D%3D99894511%26customer%255Bpostcode%255D%3DV5R%2B2T4%26customer%255Bregion%255D%3DBritish%2BColumbia"\
-    "%22%7D\u0026cardHolder=Reactivepay+Test\u0026sanitizedMask=439296******1251\u0026walletToken=7944008c4ef240e2fc5f06eac5e74f687b4c\u0026"\
-    "signature=4e3493f4d67a20487d96d2de83f03ee2"
+  let(:redirect_request) do
+    {
+      'redirectRequest': {
+        'url': 'https://demo.reactivepay.com/demo/3ds',
+        'params': {
+          'PaReq': 'TEST_PAREQ_SUCCESS',
+          'TermUrl': 'https://business.reactivepay.com/checkout_results/TOKEN/callback_3ds',
+          'MD': 'SOMEMD'
+        },
+        'type': 'post'
+      }
+    }.to_json
   end
 
   let(:reactivepay_response) { instance_double(HTTParty::Response, body: approved_response_body, success?: true) }
@@ -92,9 +95,7 @@ describe Payments::SendCreateRequest do
       it 'approved payments request' do
         interactor.run
         expect(context.payment.status).to eq 'approved'
-        expect(context.payment.signature).to eq '4e3493f4d67a20487d96d2de83f03ee2'
         expect(context.payment.payment_response).to eq JSON.parse(approved_response_body)
-        expect(context.payment.processing_url).to eq processing_url
       end
 
       it_behaves_like :success_interactor
@@ -120,6 +121,36 @@ describe Payments::SendCreateRequest do
       let(:error_message) { [{ 'code' => 'amount_less_than_balance', 'kind' => 'processing_error' }] }
 
       it_behaves_like :failed_interactor
+    end
+
+    context 'with valid response with redirectRequest' do
+      let(:approved_response_body) do
+        {
+          'success': true,
+          'result': 0,
+          'status': 200,
+          'token': 'token',
+          'processingUrl': 'https://reactive-y69rn.ondigitalocean.app/',
+          'payment': {
+            'amount': 100, 
+            'gateway_amount': 100,
+            'currency': 'USD',
+            'status': 'init',
+            'two_stage_mode': false,
+            'commission': 0.0
+          },
+          'redirectRequest': redirect_request
+        }.to_json
+      end
+
+      it 'init payments request' do
+        interactor.run
+        expect(context.payment.status).to eq 'init'
+        expect(context.payment.payment_response).to eq JSON.parse(approved_response_body)
+        expect(context.redirect_request).to eq redirect_request
+      end
+
+      it_behaves_like :success_interactor
     end
   end
 end

@@ -3,8 +3,14 @@ Rails.application.routes.draw do
 
   root 'products#index'
 
-  resources :payments, only: %i[index show new create]
+  resources :payments, only: %i[index show new create] do
+    get '3ds', to: 'payments#approve_form'
+  end
+
   resources :payouts, only: %i[index show new create]
+
+  get 'api/v1/payments/success/:id', to: 'payments#success'
+  get 'api/v1/payments/declined/:id', to: 'payments#declined'
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do

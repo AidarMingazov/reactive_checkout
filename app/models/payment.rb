@@ -1,7 +1,7 @@
 class Payment < ApplicationRecord
   extend Enumerize
 
-  AVAILABLE_STATUSES = %w[build approved declined card_invalid bad_response unexpected_result].freeze
+  AVAILABLE_STATUSES = %w[build init approved declined card_invalid bad_response unexpected_result].freeze
 
   belongs_to :product
   belongs_to :user
